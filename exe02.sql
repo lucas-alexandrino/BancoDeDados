@@ -1,37 +1,71 @@
-CREATE DATABASE db_ecommerce;
-	
-USE db_ecommerce;
+CREATE DATABASE db_pizzaria_legal;
 
-CREATE TABLE tb_produtos (
-id bigint auto_increment,
-nome varchar(255),
-categoria varchar(255),
-descricao text,
-valor float,
-desconto varchar(255) ,
-primary key(id)
+USE db_pizzaria_legal;
 
+CREATE TABLE tb_pizzas (
+	id bigint auto_increment,
+    nome varchar(255),
+    sabor varchar(255),
+    valor int,
+	ingredientes varchar(255),
+    primary key(id)
+);
+CREATE TABLE tb_categorias (
+	id bigint auto_increment,
+	salgado_doce varchar(255),
+    valor50 varchar(255),
+    primary key(id)
 );
 
-INSERT INTO tb_produtos (nome,categoria,descricao,valor,desconto)
-values ("Barbeador profissional","Higiene pessoal","Recarregável e sem fio",150.00,"15% de desconto na compra à vista");
-INSERT INTO tb_produtos (nome,categoria,descricao,valor,desconto)
-values ("Cama elástica","Lazer e Brinquedos","Cama elástica que suporta até 200kg",600.00,"15% de desconto na compra à vista");
-INSERT INTO tb_produtos (nome,categoria,descricao,valor,desconto)
-values ("Espelho","Casa","Espelho residencial anti-reflexo",150.00,"10% de desconto na compra à vista");
-INSERT INTO tb_produtos (nome,categoria,descricao,valor,desconto)
-values ("Panela antiaderente","Cozinha","Panela antiaderente profissional assinada por chef's",2000.00,"5% de desconto na compra à vista");
-INSERT INTO tb_produtos (nome,categoria,descricao,valor,desconto)
-values ("AirFryer","Cozinha","A AirFryer mais economica da categora",500.00,"20% de desconto na compra à vista");
-INSERT INTO tb_produtos (nome,categoria,descricao,valor,desconto)
-values ("Sofá 4 lugares","Casa","Sofá em suede retrátil",2500.00,"25% de desconto na compra à vista");
-INSERT INTO tb_produtos (nome,categoria,descricao,valor,desconto)
-values ("Smartphone","Celulares e Eletrônicos","Smartphone de ultima geração camêra Quad-core",3000.00,"5% de desconto na compra à vista");
-INSERT INTO tb_produtos (nome,categoria,descricao,valor,desconto)
-values ("Pneu 175/70 R13","Automotivo","Pneu semi-slick",400.00,"15% de desconto na compra à vista");
+ALTER TABLE tb_pizzas add categoria_id bigint;
 
-SELECT * FROM tb_produtos WHERE valor >500;
+ALTER TABLE tb_pizzas ADD constraint fk_pizzas_categoras
+FOREIGN KEY(categoria_id) REFERENCES tb_categorias(id);
 
-select * FROM tb_produtos where valor < 500;
 
-UPDATE tb_produtos set valor = 200 WHERE id=1;
+
+INSERT INTO tb_categorias (salgado_doce,valor50)
+values ("Salgado","Valor maior que R$50!");
+INSERT INTO tb_categorias (salgado_doce,valor50)
+values ("Salgado","Valor menor que R$50!");
+INSERT INTO tb_categorias (salgado_doce,valor50)
+values ("Doce","Valor menor que R$50!");
+INSERT INTO tb_categorias (salgado_doce,valor50)
+values ("Doce","Valor maior que R$50!");
+INSERT INTO tb_categorias (salgado_doce)
+values ("Agri-doce");
+
+
+
+INSERT INTO tb_pizzas (nome,sabor,valor,ingredientes,categoria_id)
+values ("Pizza Margherita","Margherita",40,"molho de tomate, mussarela fresca, manjericão e azeite de oliva",2);
+INSERT INTO tb_pizzas (nome,sabor,valor,ingredientes,categoria_id)
+values ("Pizza de Chocolate","Chocolate",45,"chocolate derretido,coco ralado,nozes e chocolate branco",3);
+INSERT INTO tb_pizzas (nome,sabor,valor,ingredientes,categoria_id)
+values("Pizza de Nutella","Nutella",65,"nutella,creme de avelã e amêndoas",4);
+INSERT INTO tb_pizzas (nome,sabor,valor,ingredientes,categoria_id)
+values ("Pizza Calabresa","Calabresa",40," molho de tomate, mussarela e linguiça calabresa fatiada.",2);
+INSERT INTO tb_pizzas (nome,sabor,valor,ingredientes,categoria_id)
+values ("Pizza Portuguesa","Portuguesa",50,"molho de tomate, mussarela, presunto, ovos, cebola, azeitona e pimentão.",1);
+INSERT INTO tb_pizzas (nome,sabor,valor,ingredientes,categoria_id)
+values ("Pizza Frango com Catupiry","Frango com Catupiry",57,"molho de tomate, mussarela, frango desfiado e catupiry.",1);
+INSERT INTO tb_pizzas (nome,sabor,valor,ingredientes,categoria_id)
+values("Pizza Napolitana","Napolitana",80,"molho de tomate, mussarela, alho, azeitona e anchovas.",1);
+INSERT INTO tb_pizzas (nome,sabor,valor,ingredientes,categoria_id)
+values ("Pizza de banana e chocolate","Chocolate e banana",70,"fatias de banana e pedaços de chocolate derretido,açúcar de confeiteiro.",4);
+
+SELECT * FROM tb_pizzas WHERE valor > 45;
+SELECT * FROM tb_pizzas WHERE valor > 50 and valor < 100;
+
+SELECT * FROM tb_pizzas where nome like '%M%';
+
+-- 9
+
+
+SELECT nome,sabor,valor,salgado_doce from tb_pizzas
+INNER JOIN tb_categorias ON tb_categorias.id = tb_pizzas.categoria_id;
+
+SELECT nome,sabor,valor,salgado_doce,valor50 FROM tb_pizzas
+INNER JOIN tb_categorias
+ON tb_categorias.id = tb_pizzas.categoria_id
+WHERE tb_categorias.id = 1;
