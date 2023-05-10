@@ -1,4 +1,4 @@
-*.sql linguist-language=MySQL
+*.sql linguist-language=Java
 blog_pessoal/* linguist-vendored
 projetoIntegrador/* linguist-vendored
 
